@@ -114,6 +114,6 @@ public class Guard : MonoBehaviour
         }
         Gizmos.DrawLine(previousPosition, startPosition);
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
+        //Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
     }
 }
