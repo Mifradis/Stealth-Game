@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class Guard : MonoBehaviour
 {
+    public static event System.Action OnGuardHasSpottedPlayer;
     public Transform pathHolder;
     public float speed = 8;
     public float waitTime = .3f;
     public float turnSpeed = 90;
     public Light spotlight;
+    public float timeToSpotPlayer = .5f;
     public LayerMask viewMask;
     public float viewDistance;
     float viewAngle;
+    float playerVisibleTimer;
     Transform player;
     Color originalSpotlightColor;
 
-    Vector3 targetGizmo;
+    Vector3 targetGizmo; 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -83,11 +86,20 @@ public class Guard : MonoBehaviour
         print(CanSeePlayer());
         if (CanSeePlayer())
         {
-            spotlight.color = Color.red;
+            playerVisibleTimer += Time.deltaTime;
         }
         else
         {
-            spotlight.color = originalSpotlightColor;
+            playerVisibleTimer -= Time.deltaTime;
+        }
+        playerVisibleTimer = Mathf.Clamp(playerVisibleTimer, 0, timeToSpotPlayer);
+        spotlight.color = Color.Lerp(originalSpotlightColor, Color.red, playerVisibleTimer / timeToSpotPlayer);
+        if(playerVisibleTimer >= timeToSpotPlayer)
+        {
+            if (OnGuardHasSpottedPlayer != null)
+            {
+                OnGuardHasSpottedPlayer();
+            }
         }
     }
     private void OnDrawGizmos()
