@@ -83,7 +83,7 @@ public class Guard : MonoBehaviour
     }
     private void Update()
     {
-        print(CanSeePlayer());
+        
         if (CanSeePlayer())
         {
             playerVisibleTimer += Time.deltaTime;

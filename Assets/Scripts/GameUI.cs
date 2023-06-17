@@ -35,9 +35,16 @@ public class GameUI : MonoBehaviour
     }
     void OnGameOver(GameObject gameOverUI)
     {
-        gameOverUI.SetActive(true);
-        gameIsOver = true;
-        Guard.OnGuardHasSpottedPlayer -= ShowGameloseUI;
-        FindObjectOfType<Player>().OnReachedEndOfLevel -= ShowGameWinUI;
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+            gameIsOver = true;
+            Guard.OnGuardHasSpottedPlayer -= ShowGameloseUI;
+            FindObjectOfType<Player>().OnReachedEndOfLevel -= ShowGameWinUI;
+        }
+        else
+        {
+            Debug.LogError("gameOverUI is null");
+        }
     }
 }
