@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-
+   
     public float horizontalInput;
     public float verticalInput;
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

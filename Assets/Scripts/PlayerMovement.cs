@@ -10,6 +10,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movementDirection;
     bool canMove = true;
 
+    [Header("Speed Check")]
+    [SerializeField] private float walkLimit = 6f;
+    private float currentSpeedLimit;
 
     [Header("SlopeCheck")]
     private bool isOnSlope;
@@ -30,11 +33,13 @@ public class PlayerMovement : MonoBehaviour
 
 
     PlayerInput playerInput;
+    PlayerCam playerCam;
     private Rigidbody rb;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        playerCam = GetComponent<PlayerCam>();
         if (playerInput == null)
         {
             Debug.LogError("PlayerInput component is missing");
@@ -45,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
     {
         
         cam = Camera.main.transform;
+        currentSpeedLimit = walkLimit;
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -56,13 +62,29 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        cam.position = transform.position;
         CheckSlope();
+        SetSpeedLimit();
+        LimitPlayerSpeed();
     }
     private void FixedUpdate()
     {
         Move();
     }
+    void SetSpeedLimit()
+    {
+        currentSpeedLimit = walkLimit;
+    }
+    void LimitPlayerSpeed()
+    {
+        Vector3 horizontalSpeed = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        if (horizontalSpeed.magnitude > currentSpeedLimit)
+        {
+            horizontalSpeed = horizontalSpeed.normalized * currentSpeedLimit;
+            rb.velocity = new Vector3(horizontalSpeed.x, rb.velocity.y, horizontalSpeed.z);
+        }
 
+    }
 
     void CheckSlope()
     {
@@ -86,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        movementDirection = playerInput.horizontalInput * cam.right + playerInput.verticalInput * cam.forward;
+        movementDirection = playerCam.playerBody.forward * playerInput.verticalInput + playerCam.playerBody.right * playerInput.horizontalInput;
         movementDirection = Vector3.ProjectOnPlane(movementDirection, Vector3.up).normalized;
 
         if (movementDirection.magnitude > 0 && canMove)
@@ -106,8 +128,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void RotatePlayer()
     {
-        float targetAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVel, turnSmoothTime);
-        transform.rotation = Quaternion.Euler(0, angle, 0);
+       
+
     }
 }
