@@ -35,11 +35,13 @@ public class PlayerMovement : MonoBehaviour
     PlayerInput playerInput;
     PlayerCam playerCam;
     private Rigidbody rb;
+    Player player;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         playerCam = GetComponent<PlayerCam>();
+        player = GetComponent<Player>();
         if (playerInput == null)
         {
             Debug.LogError("PlayerInput component is missing");
@@ -63,13 +65,17 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         cam.position = transform.position;
-        CheckSlope();
-        SetSpeedLimit();
-        LimitPlayerSpeed();
+        
     }
     private void FixedUpdate()
     {
-        Move();
+        CheckSlope();
+        SetSpeedLimit();
+        LimitPlayerSpeed();
+        if (!player.disabled)
+        {
+            Move();
+        }
     }
     void SetSpeedLimit()
     {

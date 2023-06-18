@@ -13,6 +13,10 @@ public class CamMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+    private void FixedUpdate()
+    {
         transform.position = cameraPosition.position;
     }
 }

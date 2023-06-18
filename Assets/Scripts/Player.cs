@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     float smoothMoveVelocity;
     Vector3 velocity;
     Rigidbody rigidbody;
-    bool disabled;
+    public bool disabled;
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
