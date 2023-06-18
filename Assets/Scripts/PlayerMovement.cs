@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Move()
     {
-        movementDirection = playerCam.playerBody.forward * playerInput.verticalInput + playerCam.playerBody.right * playerInput.horizontalInput;
+        movementDirection = cam.forward * playerInput.verticalInput + cam.right * playerInput.horizontalInput;
         movementDirection = Vector3.ProjectOnPlane(movementDirection, Vector3.up).normalized;
 
         if (movementDirection.magnitude > 0 && canMove)
